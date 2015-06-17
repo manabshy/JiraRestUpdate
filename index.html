@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Update Work Order - Capture Photo</title>
+
+    <!-- cordova script must be used for all the cordova plugins to work ON the device -->
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+    <link href="css/formf1.css" rel="stylesheet"/>
+    <link href="css/uutheme.css" rel="stylesheet"/>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/jquery-ui.min.css" rel="stylesheet"/>
+    
+    <script src="js/library/jquery-1.11.1.min.js"></script>  
+    <script src="js/library/bootstrap.min.js"></script>
+    <script src="js/library/jquery-ui.min.js"></script>
+    <script src="js/library/jquery.validate.js"></script>
+    <script src="js/library/angular-1.2.0/angular.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/capture.js"></script>    
+    <script src="js/controller/formcontroller.js"></script>    
+  
+  </head>
+<body ng-app="formApp" ng-controller="formController">
+  
+  <div class="container global-border uuBackground">
+    <div class="row div-bottom">
+      <div class="col-sm-6 form-name text-left">
+        <h2>Update Work Order</h2>
+        <span class="header">For use by Retailers</span> <br>
+        <span class="headerDescription">Update WO</span>  
+      </div>
+      <div class="col-sm-6 form-name text-left">
+        <img src="img/UUB_Logo_RGB_1-01.png" class="img-responsive uuLogo" alt="UU Logo"/>
+      </div>
+    </div>  
+
+    <form novalidate name="woForm"  enctype="multipart/form-data" role="form" id="woForm" ng-submit="submitForm(woForm.$valid)">
+     
+      <div class="row">
+        <div class="col-sm-6 ">
+          <fieldset class="scheduler-border">
+            <legend class="scheduler-border">Work Order Details</legend>
+
+            <div class="form-group">
+                <label for="woNumber">Work Order Number:</label>  
+                <select id="woNumber" name="woNumber" class="form-control">
+                  <option>Please Select</option>
+                </select>               
+            </div>                
+            <div class="form-group">
+                <label for="issType">Issue Type:</label>  
+                <input type="text" class="form-control" id="issueType" name="issueType" value="" readonly/>              
+            </div>
+            <div class="form-group">
+              <div>
+                <label for="capturePhoto">Attachment:</label>
+              </div>
+              
+              <div class="col-sm-6">                
+                <input type="file" class="filebtn" name="file" accept="image/*">
+              </div>  
+              <div class="col-sm-6">
+  
+                <button class="btn btn-info btnupload">Upload</button>  
+              </div>                               
+            </div>      
+            <div class="form-group mobile">
+                <label for="capturePhoto">Capture Photo:</label>
+                <button class="btn btn-info" onclick="getPhoto(pictureSource.PHOTOLIBRARY);"><span class="glyphicon glyphicon-book">Library</button>
+
+                <button class="btn btn-info" onclick="capturePhoto();"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span>Camera</button> 
+                <img style="display:none;width:300px;height:300px;" class="img-thumbnail" id="smallImage" src="" />
+                <img style="display:none;width:300px;height:300px;" class="img-thumbnail" id="largeImage" src="" />                
+            </div>      
+<!--                                            
+            <div class="form-group">
+                <label for="wholesalerId">Wholesaler:</label>    
+                <select id="wholesalerId" name="wholesalerId" class="form-control">
+                  <option>United Utilities</option>
+                  <option>Albion Water</option>
+                  <option>Wessex Water</option>
+                  <option>Peel Water Networks</option>
+                  <option>Machester City Council</option>
+
+                </select>                            
+            </div>   
+-->            
+
+            <div class="form-group">
+                <label for="WoNumber">Retailer:</label>  
+                <input type="text" class="form-control" id="retailer" name="retailer" placeholder="Retailer Name" 
+                 value="United Utilities" readonly/>          
+            </div> 
+
+                <div class="form-group">
+                    <label for="impact">Impact Description:</label>  
+                    <input type="text" class="form-control" id="impact" name="impact" placeholder="Impact" value="" ng-model="formData.impact" required="">    
+                    <p ng-show="woForm.impact.$invalid &amp;&amp; !woForm.impact.$pristine" class="help-block ng-hide">Impact is required.</p>                               
+                </div>  
+                <div class="form-group">
+                    <label for="operation">Operation Summary:</label>  
+                    <input type="text" class="form-control ng-pristine ng-valid" id="operation" name="operation" placeholder="Operation" ng-model="formData.operation" required="">   
+                    <p ng-show="woForm.operation.$invalid &amp;&amp; !woForm.operation.$pristine" class="help-block ng-hide">Operation is required.</p>       
+                </div>   
+
+            <div class="form-group" ng-class="{ 'has-error' : woForm.contactName.$invalid && !woForm.contactName.$pristine}">
+                <label for="contactName">Name:</label>  
+                <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Contact Name" ng-model="formData.contactName"/>   
+                <p ng-show="woForm.contactName.$invalid && !woForm.contactName.$pristine" class="help-block">Your Contact Name is required.</p>       
+
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : woForm.email.$invalid && !woForm.email.$pristine }">
+                <label for="email">Email:</label>  
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="formData.email"/>   
+                <p ng-show="woForm.email.$invalid && !woForm.email.$pristine" class="help-block">Enter a valid email.</p>
+
+            </div>               
+          </fieldset>
+        </div>
+        <div class="col-sm-6 ">
+          <fieldset class="scheduler-border">
+            <legend class="scheduler-border"> Contact Details </legend>
+            <div class="form-group">
+                <label for="bannerName">Customer Banner Name:</label>    
+                <input type="text" class="form-control" id="bannerName" placeholder="Customer Name" value="Manchester City Council" readonly>                      
+            </div>  
+            <div class="form-group">
+                <label for="issType">Issue Description:</label>  
+                <input type="text" class="form-control" id="issueDescription" name="issueDescription" value="" readonly/>              
+            </div>  
+             
+             <!-- 
+            <div class="form-group">
+                <label for="retailerId">Retailer ID:</label>    
+                <select id="retailerId" name="retailerId" class="form-control">
+                  <option>RTL0001</option>
+                  <option>RTL0002</option>
+                  <option>RTL0003</option>
+                  <option>RTL0004</option>
+                </select>            
+            </div>   
+             -->
+          <div class="form-group">
+              <label for="spidNo">SPID:</label>    
+          <input type="text" class="form-control" id="servicePointId" name="servicePointId" placeholder="Service point id" value="UU-0000920499" readonly/>                      
+              </div>   
+          <div class="form-group">
+              <label for="uprn">UPRN:</label>  
+              <input type="text" class="form-control" name="uprn" placeholder="UPRN" value="77125704" readonly/>          
+          </div>  
+          <div class="form-group">
+            <label for="address">Address of Eligible Premises to be visited:</label>
+            <textarea class="form-control" rows="3" id="address" name="address" value=""></textarea>
+          </div>
+          <div class="form-group">
+              <label for="postcodePremises">Postcode:</label>    
+              <input type="text" class="form-control" id="postcode" name="postcode" placeholder="Post Code" value="WA11HQ"/>                      
+          </div>   
+
+            <div class="form-group">
+                  <label for="date">Date (dd/mm/yyyy):</label>  
+                  <input type="text" class="form-control" id="date" name="signdate" placeholder="Date (dd/mm/yyyy)"
+                  ng-model="formData.signdate">
+              </div>             
+          </fieldset>
+        </div>
+      </div>  
+
+      <div class="row">
+        <div class="col-sm-12 text-center btnblk">
+          <!--
+          <button type="submit" class="btn btn-success sendwoFormData" ng-disabled="woForm.$invalid" ng-click="createWordOrder(woForm)">Update</button>  
+        -->
+          <button type="submit" class="btn btn-success sendwoFormData" ng-click="createWordOrder(woForm)">Update</button>  
+
+          <input type="button" class="btn btn-info" ng-click="reset(woForm)" value="Reset"></button>
+          <div id="dialog" title="Success">
+            <p>Your form is updated. Please check in JIRA</p>
+          </div>              
+          <div id="errordialog" title="Error">
+            <p></p>
+          </div>              
+
+      </div>    
+    </form>
+    <!-- SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED -->
+    <pre>
+        {{ formData }}
+    </pre>
+
+  </div>  
+       
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+
+</body>
+</html>
