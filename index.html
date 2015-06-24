@@ -41,13 +41,16 @@
         <div class="col-sm-6 ">
           <fieldset class="scheduler-border">
             <legend class="scheduler-border">Work Order Details</legend>
-
-            <div class="form-group">
-                <label for="woNumber">Work Order Number:</label>  
+            <label for="woNumber">Enter OR Select Work Order:</label>  
+            <div class="form-group col-sm-6">
+                <span id="errorMessage">No Record exists!!</span>
+                <input type="text" id="woNumberText" name="woNumberText" class="form-control" placeholder="Enter WO">
+            </div>                
+            <div class="form-group col-sm-6">
                 <select id="woNumber" name="woNumber" class="form-control">
                   <option>Please Select</option>
                 </select>               
-            </div>                
+            </div>  
             <div class="form-group">
                 <label for="issType">Issue Type:</label>  
                 <input type="text" class="form-control" id="issueType" name="issueType" value="" readonly/>              
@@ -126,6 +129,10 @@
                 <input type="text" class="form-control" id="bannerName" placeholder="Customer Name" value="Manchester City Council" readonly>                      
             </div>  
             <div class="form-group">
+                <label for="issType">Issue ID:</label>  
+                <input type="text" class="form-control" id="issueId" name="issueId" value="" readonly/>              
+            </div>  
+            <div class="form-group">
                 <label for="issType">Issue Description:</label>  
                 <input type="text" class="form-control" id="issueDescription" name="issueDescription" value="" readonly/>              
             </div>  
@@ -151,7 +158,7 @@
           </div>  
           <div class="form-group">
             <label for="address">Address of Eligible Premises to be visited:</label>
-            <textarea class="form-control" rows="3" id="address" name="address" value=""></textarea>
+            <textarea class="form-control" rows="2" id="address" name="address" value=""></textarea>
           </div>
           <div class="form-group">
               <label for="postcodePremises">Postcode:</label>    
@@ -176,7 +183,7 @@
 
           <input type="button" class="btn btn-info" ng-click="reset(woForm)" value="Reset"></button>
           <div id="dialog" title="Success">
-            <p>Your form is updated. Please check in JIRA</p>
+            <p></p>
           </div>              
           <div id="errordialog" title="Error">
             <p></p>

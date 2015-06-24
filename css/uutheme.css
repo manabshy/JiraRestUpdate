@@ -137,3 +137,13 @@ table th {
 #errordialog{
   display:none;
 }
+#errordialog,#dialog {
+  background-color: #004854!important;
+  color: white!important;
+}
+#errorMessage {
+  color: red;
+  position: absolute;
+  top: 35px;
+  display: none;
+}

@@ -13,9 +13,9 @@
 
             $scope.createWordOrder= function(form) {
 
-              var url = 'http://localhost:9090/rest/api/2/issue/' + $('#woNumber option:selected').val() + '/';
-
-              console.log('url to post:%s',url);
+              //var url = 'http://localhost:9090/rest/api/2/issue/' + $('#woNumber option:selected').val() + '/';
+              var url = base + 'issue/' + $('#woNumber option:selected').val() + '/';
+              console.log('url to post the data:%s',url);
 
               var postData = 
                   {
@@ -57,7 +57,8 @@
                     success: function (issuedata) {
                       //console.log(issuedata);
                       $(function() {
-                          $( "#dialog" ).dialog();
+                          $( "#dialog").text('WO updated in JIRA').css('color','#449d44');  
+                          $("#dialog" ).dialog();
                       });
 
                     },
